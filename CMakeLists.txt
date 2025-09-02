@@ -14,13 +14,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Sql Concurrent)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Sql Concurrent)
 
-#add_subdirectory(/home/max/libpqxx-7.8.1 pqxx-build)
-#add_subdirectory(/media/max/DATA/Qt/6.9.0/gcc_64/plugins/sqldrivers)
-
 #add_subdirectory(/usr/lib/postgresql/16/bin)
 #add_subdirectory(/usr/lib/postgresql/16/lib)
 
-#find_library(QPSQL_LIB qsqlpsql PATHS /media/max/DATA/Qt/6.9.0/gcc_64/plugins/sqldrivers)
 #find_library(QPSQL_LIB qsqlpsql PATHS /usr/lib/x86_64-linux-gnu/qt6/plugins/sqldrivers)
 
 set(PROJECT_SOURCES

@@ -6,7 +6,7 @@ DataBase::DataBase(QObject *parent)
 
     dataBase = new QSqlDatabase();
     query = new QSqlQuery();
-    tableWidget = new QTableWidget();
+    //tableWidget = new QTableWidget();
 }
 
 DataBase::~DataBase()
@@ -15,7 +15,7 @@ DataBase::~DataBase()
     qDebug() << "\tdataBase inside DataBase class instance deleted";
     delete query;
     qDebug() << "\tquery inside DataBase class instance deleted";
-    delete tableWidget;
+    //delete tableWidget;
     delete querymodel;
     delete tablemodel;
 }
@@ -75,16 +75,15 @@ void DataBase::DisconnectFromDataBase(QString nameDb)
  * \return
  */
 
-void DataBase::ReadQueryResult(QString request, int modelType){
+void DataBase::ReadQueryResult(QString request, int reqType){
     //switch(ui->cb_category->currentIndex()){
     QStringList headers;
-    //headers << "Название фильма" << "Описание фильма" << "Категория";
     headers << "Название фильма" << "Описание фильма";
 
     //QSqlTableModel *model = new QSqlTableModel(this, *dataBase);
     //QTableView *view = new QTableView;
 
-    switch(modelType){
+    switch(reqType){
     case requestAllFilms:
         {
         //tablemodel = new QSqlTableModel(this); //DOESN'T WORK, TABLE VIEW IS EMPTY
@@ -98,7 +97,10 @@ void DataBase::ReadQueryResult(QString request, int modelType){
         QTableView *view = new QTableView;
         view->setModel(tablemodel);
         //qDebug() << "Tableview has " << view->model()->rowCount() << " rows";
-        view->resizeColumnsToContents();
+        view->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding); //NO EFFECT((
+        //view->resizeColumnsToContents();
+        view->resizeColumnToContents(1);
+        view->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
         view->setColumnHidden(0, true);
         for(int n = 3; n < view->model()->columnCount(); n++){
             view->setColumnHidden(n, true);
@@ -107,7 +109,7 @@ void DataBase::ReadQueryResult(QString request, int modelType){
         // view->update();
         // view->show();
         emit sig_SendTableView(view);
-        }
+    }
         break;
     case requestComedy:
         {
@@ -122,7 +124,11 @@ void DataBase::ReadQueryResult(QString request, int modelType){
             QTableView *view = new QTableView;
             view->setModel(querymodel);
             //qDebug() << "Tableview has " << view->model()->rowCount() << " rows";
-            view->resizeColumnsToContents();
+            view->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);//NO EFFECT((
+            //view->resizeColumnsToContents();
+            view->resizeColumnToContents(0);
+            view->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
+            view->setColumnHidden(2, true);
             //view->show();
             emit sig_SendTableView(view);
     }
@@ -140,9 +146,11 @@ void DataBase::ReadQueryResult(QString request, int modelType){
         }
 
         const int num_cols = 3;
+        //tableWidget = new QTableWidget;
+        QTableWidget* tableWidget = new QTableWidget;
         tableWidget->setColumnCount(num_cols);
         tableWidget->setRowCount(0);
-
+        headers << "Категория";
         tableWidget->setHorizontalHeaderLabels(headers);
 
         uint32_t rowcounter = 0;
@@ -158,7 +166,12 @@ void DataBase::ReadQueryResult(QString request, int modelType){
             }
             ++rowcounter;
         }
-        emit sig_SendDataFromDB(tableWidget, modelType);
+        //tableWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding); //NO EFFECT((
+        //tableWidget->resizeColumnsToContents();
+        tableWidget->resizeColumnToContents(0);
+        tableWidget->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
+        tableWidget->setColumnHidden(2, true);
+        emit sig_SendDataFromDB(tableWidget);
         break;
     }
     //delete model;

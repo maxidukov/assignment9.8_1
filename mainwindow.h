@@ -7,6 +7,8 @@
 #include "database.h"
 #include "dbdata.h"
 
+#include <QGridLayout>
+
 
 
 QT_BEGIN_NAMESPACE
@@ -52,6 +54,8 @@ private:
     QString request;
     QTableWidget* tb_result2 = NULL;
     QTableView* tb_view = NULL;
+
+    void delGridLayoutItem(QGridLayout* layout, int row, int col);
 
 
 };

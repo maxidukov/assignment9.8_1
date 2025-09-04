@@ -12,6 +12,8 @@
 #include <QSqlQueryModel>
 #include <QTableView>
 
+#include <QHeaderView>
+
 #define POSTGRE_DRIVER "QPSQL"
 #define DB_NAME "MyDB"
 
@@ -48,15 +50,15 @@ public:
 
     void AddDataBase(QString driver, QString nameDB = "");
     void DisconnectFromDataBase(QString nameDb = "");
-    void RequestToDB(QString request, int modelType);
+    void RequestToDB(QString request, int reqType);
     QSqlError GetLastError(void);
     void ConnectToDataBase(QVector<QString> dataForConnect);
-    void ReadQueryResult(QString request, int modelType);
+    void ReadQueryResult(QString request, int reqType);
 
 
 signals:
 
-   void sig_SendDataFromDB(QTableWidget *tableWg, int typeR);
+   void sig_SendDataFromDB(QTableWidget *tableWg);
    void sig_SendTableView(QTableView *view);
 
    void sig_SendStatusConnection(bool);
@@ -68,7 +70,7 @@ private:
 
     QSqlDatabase* dataBase;
     QSqlQuery* query;
-    QTableWidget* tableWidget;
+    //QTableWidget* tableWidget;
     QSqlTableModel *tablemodel = new QSqlTableModel;
     QSqlQueryModel *querymodel = new QSqlQueryModel;
 

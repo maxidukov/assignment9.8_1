@@ -142,7 +142,7 @@ void MainWindow::on_pb_request_clicked()
     case requestHorrors: request += " WHERE c.name = 'Horror';";
         break;
     }
-    qDebug() << "SQL query is this: " << request;
+    //qDebug() << "SQL query is this: " << request;
 
     emit sig_RequestToDb(request, ui->cb_category->currentIndex()+1);
 
@@ -154,7 +154,7 @@ void MainWindow::on_pb_request_clicked()
  * \param typeRequest
  */
 //void MainWindow::ScreenDataFromDB(const QTableWidget *widget, int typeRequest)
-void MainWindow::ScreenDataFromDB(QTableWidget *widget)
+void MainWindow::ScreenDataFromDB(QTableWidget *new_widget)
 {
     ///Тут должен быть код ДЗ
     //switch(typeRequest){
@@ -187,20 +187,34 @@ void MainWindow::ScreenDataFromDB(QTableWidget *widget)
     //ui->tb_result->deleteLater();
     //QTableWidget* tb_result2 = new QTableWidget;
     //tb_result2 = new QTableWidget(this->centralWidget());
-    tb_result2 = widget;
+    //tb_result2 = widget;
     // QVBoxLayout* layout_table = new QVBoxLayout;
     // layout_table->addWidget(tableWidget);
     //ui->gridLayout->addLayout(layout_table,1,0);
-    ui->gridLayout->replaceWidget(ui->tb_result, tb_result2);
-    //ui->gridLayout->addWidget(tb_result2,1,0);
+
+    // QLayoutItem* item;
+    // while ( ( item = ui->gridLayout->takeAt( 0 ) ) != NULL )
+    // {
+    //     delete item->widget();
+    //     delete item;
+    // }
+    //delete ui->gridLayout->layout();
+    //ui->gridLayout->replaceWidget(ui->tb_result, tb_result2);
+
+    delGridLayoutItem(ui->gridLayout,1,0);
+    ui->gridLayout->addWidget(new_widget,1,0,4,1);
     ui->gridLayout->update();
 }
-    void MainWindow::ScreenTableViewFromDB(QTableView *view)
+
+void MainWindow::ScreenTableViewFromDB(QTableView *view)
     {
 
         ///Тут должен быть код ДЗ
-        tb_view = view;
-        ui->gridLayout->replaceWidget(ui->tb_result, tb_view);
+        // tb_view = view;
+        // ui->gridLayout->replaceWidget(ui->tb_result, tb_view);
+        // ui->gridLayout->update();
+        delGridLayoutItem(ui->gridLayout,1,0);
+        ui->gridLayout->addWidget(view,1,0,4,1);
         ui->gridLayout->update();
     }
 
@@ -251,11 +265,33 @@ void MainWindow::on_pb_clear_clicked(){
     // }
     //if(tb_result2 != NULL) tb_result2->clear();
     //ui->tb_result->clear();
-    tb_result2->clear();
-    if(tb_view != NULL){
-        tb_view->setModel(NULL);
-    }
+    // tb_result2->clear();
+    // if(tb_view != NULL){
+    //     tb_view->setModel(NULL);
+    // }
+
+    delGridLayoutItem(ui->gridLayout,1,0);
+    tb_result2 = new QTableWidget(this);
+    ui->gridLayout->addWidget(tb_result2,1,0,4,1);
+    ui->gridLayout->update();
 }
+
+ void MainWindow::delGridLayoutItem(QGridLayout* layout, int row, int col){
+     QLayoutItem* item = layout->itemAtPosition(row,col);
+     if(item)
+     {
+         //ui->gridLayout->removeItem( item );
+         QWidget* widget = item->widget();
+         if(widget)
+         {
+             layout->removeWidget(widget);
+             delete widget;
+         }
+         //QTableWidget* tb_widget = new QTableWidget(this);
+         //delete item;
+     }
+}
+
 
 
 
